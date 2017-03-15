@@ -1,0 +1,3 @@
+module InputNumber.Msg exposing (..)
+
+

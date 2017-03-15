@@ -1,4 +1,4 @@
-module Routes exposing (Sitemap(..), parsePath, navigateTo, toString)
+module Routes exposing (GuideSitemap(..), Sitemap(..), parsePath, navigateTo, toString)
 
 
 {-| Routes
@@ -7,13 +7,76 @@ module Routes exposing (Sitemap(..), parsePath, navigateTo, toString)
 
 
 import Navigation exposing (Location)
+import Combine exposing (..)
 import Route exposing (..)
 
+
+
+type GuideSitemap
+    = GuideHomeRoute
+    | DesignRoute
+    | NavRoute
+
+
+guideHomeRoute : Route GuideSitemap
+guideHomeRoute =
+    GuideHomeRoute := static ""
+      
+
+designRoute : Route GuideSitemap
+designRoute =
+    DesignRoute := static "design"
+
+
+navRoute : Route GuideSitemap
+navRoute =
+    DesignRoute := static "nav"
+
+
+sitemapGuide : Router GuideSitemap
+sitemapGuide =
+    router [ guideHomeRoute
+           , designRoute
+           , navRoute
+           ]
+
+
+routeGuide : GuideSitemap -> String
+routeGuide route =
+    case route of
+        GuideHomeRoute ->
+            reverse guideHomeRoute []
+        DesignRoute ->
+            reverse designRoute []
+        NavRoute ->
+            reverse navRoute []
+
+
+guide : Parser s GuideSitemap
+guide =
+    choice
+        [ DesignRoute <$ Combine.string "design233"
+        , NavRoute <$ Combine.string "nav123"
+        , GuideHomeRoute <$ Combine.string ""
+        ]
+
+
+show : GuideSitemap -> String
+show guide =
+    case guide of
+        DesignRoute ->
+            "design233"
+        NavRoute ->
+            "nav"
+        GuideHomeRoute ->
+            ""
+    
 
 type Sitemap
     = HomeRoute
     | GuideDesignRoute
     | GuideNavRoute
+    | GuideRoute GuideSitemap
     | ResourceRoute
     -- | ComponentRoute
     | NotMatchRoute
@@ -26,7 +89,12 @@ homeRoute =
     HomeRoute := static ""
 
 
--- ROUTE "/guids/design"
+-- ROUTE "/guide"
+
+guideRoute : Route Sitemap
+guideRoute =
+    GuideRoute := static "guide" </> custom guide
+
 
 guideDesignRoute : Route Sitemap                 
 guideDesignRoute =
@@ -52,6 +120,7 @@ sitemap =
            , guideDesignRoute
            , guideNavRoute
            , resourceRoute
+           , guideRoute
            ]
 
 
@@ -85,5 +154,7 @@ toString route =
             reverse guideNavRoute []
         ResourceRoute ->
             reverse resourceRoute []
-        NotMatchRoute ->
+        GuideRoute c ->
+            reverse guideRoute [ show c ]
+        _ ->
             Debug.crash "Cant render NotFound"                

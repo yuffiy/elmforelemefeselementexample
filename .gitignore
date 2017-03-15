@@ -5,3 +5,7 @@ repl-temp-*
 
 index.html
 index.css
+
+node_modules/
+yarn*
+*.log
