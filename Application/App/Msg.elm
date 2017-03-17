@@ -6,7 +6,7 @@ module App.Msg exposing (Msg(..))
 -}
 
 
-import Routes exposing (Sitemap(..))
+import Routes.Routes exposing (Sitemap(..))
 
 
 type Msg

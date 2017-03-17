@@ -7,7 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development ./node_modules/.bin/webpack-dev-server Application/Main.elm index.js --module-bind=elm=elm-webpack-loader --module-bind=css=style-loader!css-loader --plugin=html-webpack-plugin?template=./node_modules/html-webpack-template/index.ejs,mobile=true,inject=false,appMountId=app"
+      "start": "cross-env NODE_ENV=development ./node_modules/.bin/webpack-dev-server Application/Main.elm index.js --module-bind=elm=elm-webpack-loader --module-bind=css=style-loader!css-loader --plugin=html-webpack-plugin?template=./node_modules/html-webpack-template/index.ejs,mobile=true,inject=false,appMountId=app",
+      "test": "elm-test"
   },
   "repository": "git+https://github.com/rabbitlive/elmforelemefeselementexample.git",
   "author": "Rabbit",

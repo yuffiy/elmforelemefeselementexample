@@ -6,10 +6,9 @@ module App.Update exposing (update)
 -}
 
 
-import Routes    exposing (Sitemap, navigateTo, parsePath)
+import Routes.Routes as Routes exposing (Sitemap, navigateTo, parsePath)
 import App.Model exposing (Model)
 import App.Msg   exposing (Msg(..))
-
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -25,8 +24,6 @@ update msg model =
             ( model, Cmd.none )
 
 
-
-
 handleRoute : Sitemap -> Model -> ( Model, Cmd Msg )
 handleRoute route model =
     let
@@ -35,4 +32,4 @@ handleRoute route model =
     in
         case route of
             _ ->
-                m ! []                    
+                m ! []

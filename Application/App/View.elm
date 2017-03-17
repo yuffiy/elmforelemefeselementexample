@@ -6,9 +6,11 @@ import Html.Events exposing (onClick, onWithOptions)
 import Html.Attributes exposing (href)
 
 
-import Routes    exposing (Sitemap(..))
-import App.Model exposing (Model)
-import App.Msg   exposing (Msg(..))
+import Routes.Routes as Routes exposing (Sitemap(..))
+import Routes.Guide  as Guide
+import Routes.Component as Component
+import App.Model     exposing (Model)
+import App.Msg       exposing (Msg(..))
 
 
 view : Model -> Html Msg
@@ -38,10 +40,11 @@ link route children =
 nav_ : Html Msg
 nav_ =
     ul []
-        [ li [] [ link HomeRoute [ text "/home" ] ]
-        , li [] [ link (GuideRoute Routes.DesignRoute) [text "/guide"] ]
-        -- , li [] [ link GuideNavRoute "/guide/nav" ]
-        -- , li [] [ link ResourceRoute "/resource" ]
+        [ li [] [ link Routes.Home [ text "/home" ] ]
+        , li [] [ link (Routes.Guide Guide.Design)  [ text "/guide/design" ] ]
+        , li [] [ link (Routes.Guide Guide.Nav)  [ text "/guide/nav" ] ]
+        , li [] [ link (Routes.Component Component.Installation)  [ text "/component/installation" ] ]
+        , li [] [ link Routes.Resource  [ text "/resource" ] ]
         ]            
             
 
@@ -50,17 +53,7 @@ consoleContent : Model -> Html Msg
 consoleContent { route } =
     let
       body_ =
-          case route of
-              GuideDesignRoute ->
-                  guideDesign
-
-              GuideNavRoute ->
-                  guideNav
-
-              ResourceRoute ->
-                  resource
-              _ ->
-                  notMatch
+          notMatch
     in
         div []
             [ topBar
@@ -74,14 +67,16 @@ consoleContent { route } =
 content : Model -> Html Msg
 content ({ route } as model) =
     case route of
-        HomeRoute ->
+        Home ->
             home
-        GuideRoute s ->
+        Guide s ->
             div [] [ text "2333" ]
-        NotMatchRoute ->
+        Component s ->
+            div [] [ text "foobar" ]
+        Resource ->
+            resource
+        NoMatch ->
             notMatch
-        _ ->
-            consoleContent model
 
 
 
@@ -105,7 +100,7 @@ navTopItem sitemap path =
 logo : Html Msg
 logo =
     h1 []
-        [ link HomeRoute
+        [ link Home
               [ text "HOME"
 
               ]
@@ -116,8 +111,8 @@ navTop : Html Msg
 navTop =
     nav []
         [ ul []
-              [ navTopItem HomeRoute "home"
-              , navTopItem ResourceRoute "资源" 
+              [ navTopItem Home "home"
+              -- , navTopItem ResourceRoute "资源" 
               ]
         ]
 

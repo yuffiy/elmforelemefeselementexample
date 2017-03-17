@@ -11,7 +11,7 @@ import Button.View as Button
 
 import Json.Decode
 import Navigation
-import Routes
+import Routes.Routes
 
 
 import App.Model exposing (Model)
