@@ -12,19 +12,23 @@ import Html as H        exposing (Html, div, text, h1, h2, a, ul, li, nav)
 import Html.Events      exposing (onClick, onWithOptions)
 import Html.Attributes  exposing (src, href)
 
-import Routes.Routes    as Routes
-import Routes.App       as App exposing (..)
-import Routes.Guide     as Guide
-import Routes.Component as Component
-
-import Nav.Link         exposing (slink)
+import Nav.Link         exposing (link, slink)
 import App.Msg          exposing (Msg(..))
+
+import Routes.App       as App       exposing (..)
+import Routes.Guide     as Guide     exposing (..)
+import Routes.Component as Component exposing (..)
+
 
 logo : Html Msg
 logo =
     div []
         [ h1 []
-              [ div [] [ text "logo" ]
+              [ div []
+                    [ link Home []
+                          [ text "logo"
+                          ]
+                    ]
               ]
         ]
 
@@ -36,12 +40,10 @@ navigator c =
             slink route str 
     in
         ul []
-            [ li [] [ linkto App.Home "/home" ]
-            , li [] [ linkto (App.Guide Guide.Design) "/guide/design" ]
-            , li [] [ linkto (App.Guide Guide.Nav) "/guide/nav" ]
-            , li [] [ linkto (App.Component Component.Installation) "/component/installation" ]
-            , li [] [ linkto App.Resource "/resource" ]
-            ]        
+            [ li [] [ linkto (Guide Design) "/guide/design" ]
+            , li [] [ linkto (Component Installation) "/component/installation" ]
+            , li [] [ linkto Resource "/resource" ]
+            ]
         
 
 view : String -> Html Msg

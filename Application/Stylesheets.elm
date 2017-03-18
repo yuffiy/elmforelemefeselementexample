@@ -2,6 +2,7 @@ port module Stylesheets exposing (..)
 
 import Css.File exposing (CssFileStructure, CssCompilerProgram)
 import InputNumber.Stylesheet as InputNumber
+import Component.Layout.Stylesheets as Layout
 import Component.Button.Stylesheets as Button
 import Component.Icon.Stylesheets as Icon
 
@@ -14,7 +15,8 @@ fileStructure : CssFileStructure
 fileStructure =
   Css.File.toFileStructure
     [ ( "index.css"
-      , Css.File.compile [ Icon.css
+      , Css.File.compile [ Layout.css
+                         , Icon.css
                          , Button.css
                          ]
       ) ]

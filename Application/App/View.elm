@@ -15,16 +15,20 @@ import Html.Attributes exposing (href)
 import Html.Lazy exposing (lazy)
 
 import Routes.Routes    as Routes
-import Routes.App       as App
-import Routes.Guide     as Guide
+import Routes.App       as App exposing (..)
+import Routes.Guide     as Guide exposing (..)
 import Routes.Component as Component
 
-import Nav.Link exposing (link)
+import Nav.Link exposing (link, slink)
 
 import App.Model        exposing (Model)
 import App.Msg          exposing (Msg(..))
 
+
 import Home.View as Home
+import Header.View as Header
+import Design.View as Design
+import Nav.View    as Nav
 
 
 import Component.Icon.Icon as Icon
@@ -33,38 +37,66 @@ import Component.Button.Button as Button
 
 
 view : Model -> Html Msg
-view model =
-    div [] [ content model <| div [] []
-           ]
+view ({ route } as model) =
+    let
+        children =
+            case route of
+                Home ->
+                    Nothing
+                NoMatch ->
+                    Nothing
+                _ ->
+                    Just route
+    in
+        div [] [ content children
+               ]
     
 
-content : Model -> Html Msg -> Html Msg
-content ({ route } as model) =
+content : Maybe App.Sitemap -> Html Msg
+content s =
+    case s of
+        Just r ->
+            layout r
+        Nothing ->
+            Home.view
+
+
+layout : App.Sitemap -> Html Msg
+layout r =
     let
-        rview =
-            case route of
-                App.Home ->
-                    lazy <| always Home.view 
-                App.NoMatch ->
-                    lazy <| always Home.view
+        ( aside, body_ ) =
+            case r of
+                Guide sr ->
+                    let
+                        nav_ : Html Msg
+                        nav_ =
+                            ul []
+                                [ li [] [ slink (Guide Design) "设计原则" ]
+                                , li [] [ slink (Guide Nav) "导航" ]
+                                ]
+
+                        view_ : Html Msg
+                        view_ =
+                            case sr of
+                                Design ->
+                                    Design.view
+                                Nav ->
+                                    Nav.view
+                    in
+                        ( nav_ :: [], view_ :: [] )
+                Component sr ->
+                    ( [], [ Design.view ] )
                 _ ->
-                    layout model
-    in
-        rview
-
-
-layout : Model -> Html Msg -> Html Msg
-layout ({ route } as model) children =
-    div []
-        [ header []
-              [ -- nav_
-              ]
-        , section []
-            [ children
+                    ( [], [] )
+    in        
+        div []
+            [ header []
+                  [ Header.view ""
+                  ]
+            , section [] (aside ++ body_)
+            , footer []
+                []
             ]
-        , footer []
-            []
-        ]
 
         -- [ h1 [] [ text "home" ]
         -- , cloading
@@ -74,113 +106,3 @@ layout ({ route } as model) children =
         --     , text " 加载中"
         --     ]
         -- ]
-        
-        
-
--- nav_ : Html Msg
--- nav_ =
---     ul []
---         [ li [] [ link App.Home [] [ text "/home" ] ]
---         , li [] [ link (App.Guide Guide.Design) [] [ text "/guide/design" ] ]
---         , li [] [ link (App.Guide Guide.Nav) [] [ text "/guide/nav" ] ]
---         , li [] [ link (App.Component Component.Installation) [] [ text "/component/installation" ] ]
---         , li [] [ link App.Resource []  [ text "/resource" ] ]
---         ]
-        
-
-
-
-consoleContent : Model -> Html Msg
-consoleContent { route } =
-    let
-      body_ =
-          notMatch
-    in
-        div []
-            [ topBar
-            , aside [] []
-            , section []
-                [ body_
-                ]
-            ]
-
-
--- content : Model -> Html Msg
--- content ({ route } as model) =
---     case route of
---         App.Home ->
---             home
---         App.Guide s ->
---             div [] [ text "2333" ]
---         App.Component s ->
---             div [] [ text "foobar" ]
---         App.Resource ->
---             resource
---         App.NoMatch ->
---             notMatch
-
-
-
-guide : Html Msg
-guide =
-    h1 [] [ text "guide" ]                
-
-    
-
-
-
-navTopItem : App.Sitemap -> String -> Html Msg
-navTopItem sitemap path =
-    li [] [ -- link sitemap [ text path ]
-          ]
-
-
-logo : Html Msg
-logo =
-    h1 []
-        [ -- link App.Home
-          --     [ text "HOME"
-
-          --     ]
-        ]
-
-
-navTop : Html Msg
-navTop =
-    nav []
-        [ ul []
-              [ navTopItem App.Home "home"
-              -- , navTopItem ResourceRoute "资源" 
-              ]
-        ]
-
-
-topBar : Html Msg
-topBar =
-    header []
-        [ div []
-              [ logo
-              , navTop
-              ]
-        ]
-        
-
-
-guideDesign : Html Msg
-guideDesign =
-    h1 [] [ text "GuideDesign" ]
-
-
-guideNav : Html Msg
-guideNav =
-    h1 [] [ text "guideNav" ]
-
-
-resource : Html Msg
-resource =
-    h1 [] [ text "resource" ]
-
-
-notMatch : Html Msg
-notMatch =
-    h1 [] [ text "notMatch" ]        
