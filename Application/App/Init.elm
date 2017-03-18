@@ -7,7 +7,8 @@ module App.Init exposing (init, parseRoute)
 
 
 import Navigation exposing (Location)
-import Routes.Routes exposing (Sitemap, parsePath)
+import Routes.App exposing (Sitemap)
+import Routes.Routes exposing (parsePath)
 import App.Model exposing (Model, initModel)
 import App.Msg exposing (Msg(..))
 

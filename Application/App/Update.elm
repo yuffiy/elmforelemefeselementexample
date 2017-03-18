@@ -6,7 +6,8 @@ module App.Update exposing (update)
 -}
 
 
-import Routes.Routes as Routes exposing (Sitemap, navigateTo, parsePath)
+import Routes.Routes as Routes exposing (navigateTo, parsePath)
+import Routes.App exposing (Sitemap)
 import App.Model exposing (Model)
 import App.Msg   exposing (Msg(..))
 

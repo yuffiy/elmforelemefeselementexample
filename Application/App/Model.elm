@@ -6,7 +6,7 @@ module App.Model exposing (Model, initModel)
 -}
 
 
-import Routes.Routes exposing (Sitemap(..))
+import Routes.App exposing (Sitemap(..))
 
 
 type alias Model =

@@ -1,52 +1,93 @@
 module App.View exposing (view)
 
+
+{-| App.View
+
+App 主视图
+
+-}
+
+
 import Json.Decode exposing (succeed)
 import Html exposing (Html, div, text, h1, a, ul, li, nav, header, section, footer, aside)
 import Html.Events exposing (onClick, onWithOptions)
 import Html.Attributes exposing (href)
+import Html.Lazy exposing (lazy)
 
-
-import Routes.Routes as Routes exposing (Sitemap(..))
-import Routes.Guide  as Guide
+import Routes.Routes    as Routes
+import Routes.App       as App
+import Routes.Guide     as Guide
 import Routes.Component as Component
-import App.Model     exposing (Model)
-import App.Msg       exposing (Msg(..))
+
+import Nav.Link exposing (link)
+
+import App.Model        exposing (Model)
+import App.Msg          exposing (Msg(..))
+
+import Home.View as Home
+
+
+import Component.Icon.Icon as Icon
+import Component.Icon.Loading as Loading exposing (cloading)
+import Component.Button.Button as Button
 
 
 view : Model -> Html Msg
 view model =
-    div [] [ text "hello world"
-           , nav_
-           , content model
+    div [] [ content model <| div [] []
            ]
+    
 
-
-
-link : Sitemap -> List (Html Msg) -> Html Msg
-link route children =
+content : Model -> Html Msg -> Html Msg
+content ({ route } as model) =
     let
-        opts =
-            { preventDefault = True
-            , stopPropagation = True
-            }
+        rview =
+            case route of
+                App.Home ->
+                    lazy <| always Home.view 
+                App.NoMatch ->
+                    lazy <| always Home.view
+                _ ->
+                    layout model
     in
-        a [ href (Routes.toString route)
-          , onWithOptions "click" opts (succeed <| RouteTo route)
-          ]
-        children        
+        rview
 
 
+layout : Model -> Html Msg -> Html Msg
+layout ({ route } as model) children =
+    div []
+        [ header []
+              [ -- nav_
+              ]
+        , section []
+            [ children
+            ]
+        , footer []
+            []
+        ]
 
-nav_ : Html Msg
-nav_ =
-    ul []
-        [ li [] [ link Routes.Home [ text "/home" ] ]
-        , li [] [ link (Routes.Guide Guide.Design)  [ text "/guide/design" ] ]
-        , li [] [ link (Routes.Guide Guide.Nav)  [ text "/guide/nav" ] ]
-        , li [] [ link (Routes.Component Component.Installation)  [ text "/component/installation" ] ]
-        , li [] [ link Routes.Resource  [ text "/resource" ] ]
-        ]            
-            
+        -- [ h1 [] [ text "home" ]
+        -- , cloading
+        -- , 
+        -- , Button.primary []
+        --     [ Loading.loading (Icon.config "#FFFFFF" 16)
+        --     , text " 加载中"
+        --     ]
+        -- ]
+        
+        
+
+-- nav_ : Html Msg
+-- nav_ =
+--     ul []
+--         [ li [] [ link App.Home [] [ text "/home" ] ]
+--         , li [] [ link (App.Guide Guide.Design) [] [ text "/guide/design" ] ]
+--         , li [] [ link (App.Guide Guide.Nav) [] [ text "/guide/nav" ] ]
+--         , li [] [ link (App.Component Component.Installation) [] [ text "/component/installation" ] ]
+--         , li [] [ link App.Resource []  [ text "/resource" ] ]
+--         ]
+        
+
 
 
 consoleContent : Model -> Html Msg
@@ -64,19 +105,19 @@ consoleContent { route } =
             ]
 
 
-content : Model -> Html Msg
-content ({ route } as model) =
-    case route of
-        Home ->
-            home
-        Guide s ->
-            div [] [ text "2333" ]
-        Component s ->
-            div [] [ text "foobar" ]
-        Resource ->
-            resource
-        NoMatch ->
-            notMatch
+-- content : Model -> Html Msg
+-- content ({ route } as model) =
+--     case route of
+--         App.Home ->
+--             home
+--         App.Guide s ->
+--             div [] [ text "2333" ]
+--         App.Component s ->
+--             div [] [ text "foobar" ]
+--         App.Resource ->
+--             resource
+--         App.NoMatch ->
+--             notMatch
 
 
 
@@ -84,26 +125,23 @@ guide : Html Msg
 guide =
     h1 [] [ text "guide" ]                
 
-
-home : Html Msg
-home =
-    h1 [] [ text "home" ]
+    
 
 
 
-navTopItem : Sitemap -> String -> Html Msg
+navTopItem : App.Sitemap -> String -> Html Msg
 navTopItem sitemap path =
-    li [] [ link sitemap [ text path ]
+    li [] [ -- link sitemap [ text path ]
           ]
 
 
 logo : Html Msg
 logo =
     h1 []
-        [ link Home
-              [ text "HOME"
+        [ -- link App.Home
+          --     [ text "HOME"
 
-              ]
+          --     ]
         ]
 
 
@@ -111,7 +149,7 @@ navTop : Html Msg
 navTop =
     nav []
         [ ul []
-              [ navTopItem Home "home"
+              [ navTopItem App.Home "home"
               -- , navTopItem ResourceRoute "资源" 
               ]
         ]
