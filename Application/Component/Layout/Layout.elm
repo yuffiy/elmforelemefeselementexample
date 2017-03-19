@@ -66,24 +66,29 @@ colConfig =
     }
 
 
-gutter : Float -> RowConfig
-gutter g =
-    { rowConfig | gutter = g }
+gutter : Float -> RowConfig -> RowConfig
+gutter g c =
+    { c | gutter = g }
 
 
-layout : Layout -> RowConfig
-layout l =
-    { rowConfig | layout = l }
+layout : Layout -> RowConfig -> RowConfig
+layout l c =
+    { c | layout = l }
 
 
-justify : Justify -> RowConfig
-justify j =
-    { rowConfig | justify = j }
+justify : Justify -> RowConfig -> RowConfig
+justify j c =
+    { c | justify = j }
 
 
-align : Align -> RowConfig
-align a =
-    { rowConfig | align = a }
+align : Align -> RowConfig -> RowConfig
+align a c =
+    { c | align = a }
+
+
+swap : Int -> ColConfig -> ColConfig
+swap s c =
+    { c | swap = s }
 
 
 row : RowConfig -> List (Attribute msg) -> List (Html msg) -> Html msg
@@ -92,9 +97,45 @@ row { gutter, layout, justify, align } =
         lcs =
             case layout of
                 Flex ->
-                    Style.FlexRow
+                    Style.FlexRow :: []
                 _ ->
-                    Style.Row
+                    Style.Row :: []
+                        
+        jcs =
+            if layout == Flex then
+                case justify of
+                    Center ->
+                        Style.FlexStart :: []
+                    _ ->
+                        Style.FlexStart :: []
+                else
+                    []
+
+                        
+        acs =
+            if layout == Flex then
+                case align of
+                    Middle ->
+                        Style.FlexStart :: []
+                    Top ->
+                        Style.FlexStart :: []
+                    Bottom ->
+                        Style.FlexStart :: []
+            else
+                []
+                        
     in
-        ((<|) div) << (::) (class [ lcs ])            
+        ((<|) div) << (::) (class <| lcs ++ jcs)            
     
+
+
+
+col : ColConfig -> List (Attribute msg) -> List (Html msg) -> Html msg
+col { swap } =
+    let
+        ccs =
+            Style.Col
+        scs =
+            Style.Swap swap
+    in
+        ((<|) div) << (::) (class [ ccs, scs ])
