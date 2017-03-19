@@ -40,9 +40,9 @@ navigator c =
             slink route str 
     in
         ul []
-            [ li [] [ linkto (Guide Design) "/guide/design" ]
-            , li [] [ linkto (Component Installation) "/component/installation" ]
-            , li [] [ linkto Resource "/resource" ]
+            [ li [] [ linkto (Guide Design) "指南" ]
+            , li [] [ linkto (Component Installation) "组件" ]
+            , li [] [ linkto Resource "资源" ]
             ]
         
 

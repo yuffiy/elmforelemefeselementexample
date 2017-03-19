@@ -13,6 +13,8 @@ import Html exposing (Html, div, text, h1, a, ul, li, nav, header, section, foot
 import Html.Events exposing (onClick, onWithOptions)
 import Html.Attributes exposing (href)
 import Html.Lazy exposing (lazy)
+import Html.CssHelpers
+import App.Stylesheets as Style
 
 import Routes.Routes    as Routes
 import Routes.App       as App exposing (..)
@@ -34,6 +36,10 @@ import Nav.View    as Nav
 import Component.Icon.Icon as Icon
 import Component.Icon.Loading as Loading exposing (cloading)
 import Component.Button.Button as Button
+
+
+{ class } =
+    Html.CssHelpers.withNamespace "App"
 
 
 view : Model -> Html Msg
@@ -90,7 +96,9 @@ layout r =
                     ( [], [] )
     in        
         div []
-            [ header []
+            [ header [ class [ Style.Header
+                             ]
+                     ]
                   [ Header.view ""
                   ]
             , section [] (aside ++ body_)

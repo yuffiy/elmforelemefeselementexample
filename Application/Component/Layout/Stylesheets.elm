@@ -22,7 +22,8 @@ swaps =
                 [ width (pct ((toFloat i) / 12 * 100))
                 ]
     in
-        List.range 0 12 |> List.map tocss
+        List.range 0 12
+            |> List.map tocss
 
 
 css =

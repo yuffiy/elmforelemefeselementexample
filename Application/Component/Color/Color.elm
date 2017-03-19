@@ -7,7 +7,8 @@ module Component.Color.Color exposing (..)
 
 -}
 
-        
+
+{-| 主色 -}
 lightBlue : String
 lightBlue =
     "#58B7FF"
