@@ -14,15 +14,79 @@ import App.Msg   exposing (Msg(..))
 import Component.Layout.Layout exposing (..)
 import Contents                exposing (..)
 
+import Combine exposing (..)
+import Combine.Char exposing (..)
+import Combine.Num exposing (..)
+
+
+
+type Block
+    = BHeader String
+    | BList (List String) 
+
+
+
+header : Parser s Block
+header =
+    BHeader
+        <$> regex "#{1,6} [^\n]*"
+        <?> "header"
+
+
+
+newline =
+    between (string "\n") (string "\n")
+
+
+list : Parser s Block
+list =
+    BList
+        <$> newline (many <| regex "[-]{1} [^\n]*")
+        <?> "list"
+
+
+expr : Parser s Block
+expr =
+    lazy <|
+        \() ->
+            let
+                blocks =
+                    [ header
+                    , list
+                    ]
+            in
+                whitespace *> choice blocks <* whitespace
+
+
+program : Parser s (List Block)
+program =
+    manyTill expr end
+
+        
 
 view : Html Msg
 view =
     let
+        _ =
+            Debug.log "err" "- 1\n- 2\n- 3\n\n"
         title =
-            Tuple.first design
+            Debug.log "parse" <|
+                parse program """
+# Header1
+## Header2
+### Header3
+#### Header4
+##### Header5
+###### Header6
+
+- 1
+- 2
+- 3
+
+"""
     in
         div []
-            [ h2 [] [ text title ]
+            [ h2 [] [ text "123" ]
             , row rowConfig []
                 [ col (colConfig |> swap 3) [] [ text "1" ]
                 , col (colConfig |> swap 3) [] [ text "2" ]
