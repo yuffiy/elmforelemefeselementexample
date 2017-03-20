@@ -75,7 +75,7 @@ css =
           [ textDecoration none
           , color inherit
           , hover
-              [ color (hex Color.blue)
+              [ color inherit
               ]
           ]
         

@@ -16,27 +16,101 @@ import Component.Typo.Typo   as Typo
 
 
 type CssClasses
-    = Header
+    = NoOp
+    | Container
+    | MainContainer
+    | Header
+    | HeaderContainer
+    | HeaderLeftContainer
+    | HeaderRightContainer
+    | LogoContainer
+    | Logo
+    | NavContainer
+    | NavItemContainer
+    | NavItem
+    | NavItemActive
     | Aside
     | Main
 
 
 css =
     (stylesheet << namespace "App")
-    [ class Header
-          [ position fixed
-          , top zero
-          , left zero
-          , right zero
+    [ class Container
+          [ displayFlex
+          , height (pct 100)
+          , flexDirection column
+          , justifyContent center
+          ]
+    , class MainContainer
+          [ displayFlex
+          , flex auto
+          , width (px 1140)
+          , margin2 zero auto
+          ]
+    , class HeaderContainer
+          [ displayFlex
+          , width (px 1140)
+          , height (Css.rem 5)
+          , margin2 zero auto 
+          ]
+    , class HeaderLeftContainer
+          [ flex auto
+          , displayFlex
+          , justifyContent flexStart
+          , alignItems center
+          ]
+    , class HeaderRightContainer
+          [ flex auto
+          , displayFlex
+          , justifyContent flexEnd
+          , alignItems center          
+          ]
+    , class LogoContainer
+          [ flex auto
+          , color (hex Color.white)
+          ]
+    , class Logo
+          [ width (Css.rem 10)
+          , height (Css.rem 2)
+          ]
+    , class NavContainer
+          [ displayFlex
+          , width (Css.rem 20)
+          , margin2 zero auto
+          , paddingRight (Css.rem 2)
+          ]
+    , class NavItemContainer
+          [ flex auto
+          , displayFlex
+          , justifyContent center
+          , alignItems center
+          ]
+    , class NavItem
+          [ displayFlex
+          , justifyContent center
+          , alignItems center
+          , padding2 zero (Css.rem 1.25)
+          , height (Css.rem 5)
+          , boxSizing borderBox
+          , fontSize (px Typo.medium)
+          , color (hex Color.white)
+          , opacity (num 0.8)
+          , hover
+              [ opacity (num 1)
+              ]
+          , withClass NavItemActive
+              [ opacity (num 1)
+              , borderBottom3 (px 4) solid (rgba 255 255 255 0.8) 
+              ]
+          ]
+    , class Header
+          [ flex2 zero (Css.rem 3.5)
+          , backgroundColor (hex Color.blue)
           ]
     , class Aside
-          [ position fixed
-          , top zero
-          , left zero
-          , bottom zero
+          [ flex2 zero (Css.rem 4)
           ]
     , class Main
-          [ paddingTop (Css.rem 5)
-          , paddingLeft (Css.rem 10)
+          [ flex auto
           ]
     ]

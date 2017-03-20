@@ -8,12 +8,15 @@ module Home.View exposing (view)
 -}
 
 
-import Html exposing (Html, div, text, h1, h2, a, ul, li, nav, header, section, footer, aside)
-import Html.Events exposing (onClick, onWithOptions)
+import Html as H       exposing (Html, div, text, h1, h2, a, ul, li, nav, header, section, footer, aside)
+import Html.Events     exposing (onClick, onWithOptions)
 import Html.Attributes exposing (href)
 
+import App.Model       exposing (Model)
+import App.Msg         exposing (Msg(..))
+
 import Header.View as Header
-import App.Msg     exposing (Msg(..))
+
 
 
 banner : Html Msg
@@ -23,12 +26,10 @@ banner =
         ]
 
 
-view : Html Msg
-view =
+view : Model -> Html Msg
+view m =
     div []
-        [ header []
-              [ Header.view ""
-              ]
+        [ (Header.view "" m)
         , section []
             [ banner
             ]

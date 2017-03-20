@@ -23,24 +23,19 @@ type alias Config =
     }
 
 
-config : String -> Float -> Config
-config c s=
-    Config c s
-
-
-defaultConfig : Config
-defaultConfig =
+config : Config
+config =
     { color = silver
     , size  = 14
     }
 
 
-color : String -> Config
-color c =
-    Config c defaultConfig.size
+color : String -> Config -> Config
+color cc c =
+    Config cc c.size
 
 
-size : Float -> Config
-size s =
-    Config defaultConfig.color s        
+size : Float -> Config -> Config
+size s c =
+    Config c.color s        
         

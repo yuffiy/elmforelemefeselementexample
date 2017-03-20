@@ -17,7 +17,7 @@ import Svg exposing (Svg, svg, circle, animateTransform, animate)
 import Svg.Attributes exposing (..)
 
 import Component.Icon.Stylesheets as Style
-import Component.Icon.Icon exposing (Config, defaultConfig)
+import Component.Icon.Icon exposing (Config, config)
 
 
 { class, classList } =
@@ -108,4 +108,4 @@ loading { color, size } =
               
 cloading : Html msg
 cloading =
-    loading defaultConfig
+    loading config

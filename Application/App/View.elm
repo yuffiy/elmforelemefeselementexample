@@ -54,33 +54,51 @@ view ({ route } as model) =
                 _ ->
                     Just route
     in
-        div [] [ content children
-               ]
+        div [ class [ Style.Container
+                    ]
+            ]
+        [ content model children
+        ]
     
 
-content : Maybe App.Sitemap -> Html Msg
-content s =
+content : Model -> Maybe App.Sitemap -> Html Msg
+content m s =
     case s of
         Just r ->
-            layout r
+            layout m r
         Nothing ->
-            Home.view
+            Home.view m
 
 
-layout : App.Sitemap -> Html Msg
-layout r =
+layout : Model -> App.Sitemap -> Html Msg
+layout m r =
     let
-        ( aside, body_ ) =
+        asidec =
+            aside [ class [ Style.Aside
+                          ]
+                  ]
+
+
+        mainc =
+            section [ class [ Style.Main
+                            ]
+                    ]
+
+        
+        ( aside_, body_ ) =
             case r of
                 Guide sr ->
                     let
                         nav_ : Html Msg
                         nav_ =
-                            ul []
-                                [ li [] [ slink (Guide Design) "设计原则" ]
-                                , li [] [ slink (Guide Nav) "导航" ]
-                                ]
-
+                            asidec [ nav []
+                                         [ ul []
+                                              [ li [] [ slink (Guide Design) "设计原则" ]
+                                              , li [] [ slink (Guide Nav) "导航" ]
+                                              ]
+                                         ]
+                                   ]
+                            
                         view_ : Html Msg
                         view_ =
                             case sr of
@@ -89,19 +107,17 @@ layout r =
                                 Nav ->
                                     Nav.view
                     in
-                        ( nav_ :: [], view_ :: [] )
+                        ( nav_ :: [], (mainc [ view_ ]) :: [] )
                 Component sr ->
-                    ( [], [ Design.view ] )
+                    ( [], [] )
                 _ ->
                     ( [], [] )
     in        
-        div []
-            [ header [ class [ Style.Header
-                             ]
-                     ]
-                  [ Header.view ""
-                  ]
-            , section [] (aside ++ body_)
+        div [ class [ Style.Container ] ]
+            [ (Header.view "" m)
+            , section [ class [ Style.MainContainer ]
+                      ]
+                  (aside_ ++ body_)
             , footer []
                 []
             ]
