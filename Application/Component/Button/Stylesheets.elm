@@ -4,8 +4,8 @@ module Component.Button.Stylesheets exposing (..)
 import Css           exposing (..)
 import Css.Namespace exposing (namespace)
 
-import Color.Main as Color
-import Typography.Typography as Typo
+import Component.Color.Color as Color
+import Component.Typo.Typo   as Typo
 
 
 type CssClasses

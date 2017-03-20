@@ -30,6 +30,8 @@ type CssClasses
     | NavItem
     | NavItemActive
     | Aside
+    | AsideNavItem
+    | AsideNavItemActive
     | Main
 
 
@@ -45,13 +47,17 @@ css =
           [ displayFlex
           , flex auto
           , width (px 1140)
+          , boxSizing borderBox
           , margin2 zero auto
+          , padding2 (Css.rem 3) (Css.rem 1)
           ]
     , class HeaderContainer
           [ displayFlex
+          , boxSizing borderBox
           , width (px 1140)
           , height (Css.rem 5)
-          , margin2 zero auto 
+          , margin2 zero auto
+          , padding2 zero (Css.rem 1)
           ]
     , class HeaderLeftContainer
           [ flex auto
@@ -108,7 +114,16 @@ css =
           , backgroundColor (hex Color.blue)
           ]
     , class Aside
-          [ flex2 zero (Css.rem 4)
+          [ flex2 zero (pct 20)
+          ]
+    , class AsideNavItem
+          [ boxSizing borderBox
+          , height (Css.rem 3)
+          , lineHeight (Css.rem 3)
+          , fontSize (px Typo.medium)
+          , withClass AsideNavItemActive
+              [ color (hex Color.blue)
+              ]
           ]
     , class Main
           [ flex auto

@@ -46,7 +46,7 @@ navitem : App.Sitemap -> String -> App.Sitemap -> Html Msg
 navitem r s cr =
     let
         acs =
-            if cr == r then
+            if toParent cr == toParent r then
                 Style.NavItemActive
             else
                 Style.NoOp

@@ -4,10 +4,9 @@ import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (disabled)
 import Html.Lazy exposing (lazy)
-import Html.CssHelpers
-import InputNumber.Stylesheet as Style
 
-import Button.View as Button
+-- import InputNumber.Stylesheet as Style
+-- import Button.View as Button
 
 import Json.Decode
 import Navigation

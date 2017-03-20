@@ -464,5 +464,3 @@ child path rs =
             { parser = (|>) <$> choice ps
             , components = [ CRoute path ]
             }
-            
-

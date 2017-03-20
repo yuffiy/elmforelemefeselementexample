@@ -16,7 +16,7 @@ import Routes.Route exposing (..)
 
 type Sitemap
     = Design
-    | Nav      
+    | Nav
 
 
 design : Route Sitemap

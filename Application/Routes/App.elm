@@ -1,4 +1,4 @@
-module Routes.App exposing (Sitemap(..), routes, toString)
+module Routes.App exposing (Sitemap(..), routes, toString, toParent)
 
 
 {-| App routes.
@@ -21,7 +21,9 @@ import Routes.Component as Component
 
 type Sitemap
     = Home
+    | GuideHome
     | Guide Guide.Sitemap
+    | ComponentHome
     | Component Component.Sitemap
     | Resource
     | NoMatch
@@ -69,3 +71,14 @@ toString route =
             reverse resource []
         _ ->
             Debug.crash "Cant render NoMatch"                
+
+
+toParent : Sitemap -> Maybe Sitemap
+toParent s =
+    case s of
+        Guide c ->
+            Just GuideHome
+        Component c ->
+            Just ComponentHome
+        _ ->
+            Nothing

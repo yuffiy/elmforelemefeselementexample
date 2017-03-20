@@ -70,6 +70,28 @@ content m s =
             Home.view m
 
 
+
+asideNav : List (App.Sitemap, String) -> App.Sitemap -> Html Msg
+asideNav l cr =
+    let
+        item (r, s) =
+            let
+                acs =
+                    if cr == r then
+                        Style.AsideNavItemActive
+                    else
+                        Style.NoOp
+            in
+                li [ class [ Style.AsideNavItem, acs ] ]
+                    [ slink r s ]
+    in
+        aside [ class [ Style.Aside ] ]
+            [ nav []
+                  [ ul [] (List.map item l) 
+                  ]
+            ]
+
+
 layout : Model -> App.Sitemap -> Html Msg
 layout m r =
     let
@@ -91,13 +113,9 @@ layout m r =
                     let
                         nav_ : Html Msg
                         nav_ =
-                            asidec [ nav []
-                                         [ ul []
-                                              [ li [] [ slink (Guide Design) "设计原则" ]
-                                              , li [] [ slink (Guide Nav) "导航" ]
-                                              ]
-                                         ]
-                                   ]
+                            asideNav [ ( Guide Design , "设计原则" )
+                                     , ( Guide Nav, "导航" )
+                                     ] m.route
                             
                         view_ : Html Msg
                         view_ =
@@ -114,9 +132,9 @@ layout m r =
                     ( [], [] )
     in        
         div [ class [ Style.Container ] ]
-            [ (Header.view "" m)
+            [ (Header.view "" m)  
             , section [ class [ Style.MainContainer ]
-                      ]
+                      ] 
                   (aside_ ++ body_)
             , footer []
                 []

@@ -29,6 +29,7 @@ css =
           [ fontFamilies Typo.fontFamily
           , fontSize (px Typo.medium)
           , overflowX hidden
+          , color (hex Color.black)
           , children
                 [ div
                   [ height (pct 100)

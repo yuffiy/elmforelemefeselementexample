@@ -9,19 +9,21 @@ module Component.Button.Button exposing
     , text
     )
 
+
+{-| Button
+
+
+-}
+
 import Html            exposing (Html, Attribute)
 import Html.Attributes exposing (style, autofocus, type_, disabled)
 import Html.CssHelpers
 import Component.Button.Stylesheets as Style
 
-import Color.Main      exposing (..)
+import Component.Color.Color exposing (..)
 import Debug
 
-{-| Button
 
-
-
--}
 
 
 type Size
