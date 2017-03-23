@@ -1,17 +1,6 @@
 module Main exposing (..)
 
-import Html exposing (Html, button, div, text)
-import Html.Events exposing (onClick)
-import Html.Attributes exposing (disabled)
-import Html.Lazy exposing (lazy)
-
--- import InputNumber.Stylesheet as Style
--- import Button.View as Button
-
-import Json.Decode
 import Navigation
-import Routes.Routes
-
 
 import App.Model exposing (Model)
 import App.Init exposing (init, parseRoute)
@@ -20,16 +9,62 @@ import App.Update exposing (update)
 import App.Subscriptions exposing (subscriptions)
 import App.View exposing (view)
 
+import Combine exposing (..)
+import Combine.Char exposing (..)
+import Combine.Num exposing (..)
 
 
 main : Program Never Model Msg
 main =
-  Navigation.program parseRoute
-      { init = init
-      , view = view
-      , update = update
-      , subscriptions = subscriptions
-      }
+    let
+        _ =
+            Debug.log "TEST" <|
+                parse program "foo![alt](./images/123.jpg)bar" 
+    in
+        Navigation.program parseRoute
+            { init = init
+            , view = view
+            , update = update
+            , subscriptions = subscriptions
+            }
+
+
+type E
+    = EStr String
+    | EImg String String
+
+
+strong =
+    string "**" *> regex "[^\n*]*" <* string "**"
+
+em =
+    string "*" *> regex "[^\n*]*" <* string "*"
+
+link =
+    regex "\\[[^\n\\]]*\\]\\([^\n\\)]*\\)"
+
+str =
+    EStr <$> regex "[^\n\\[\\!\\*\\_\\`]*"
+
+img =
+    EImg <$> 
+        ((string "!") *> (brackets <| regex "[^\n\\]]*"))
+        <*> (parens <| regex "[^\n\\)]*")
+        <?> "img"
+
+expr =
+    lazy <|
+        \() ->
+            choice
+            [ img
+            , str
+            ]
+
+
+program =
+    manyTill expr end
+
+-- regex "!\\[[^\n\\]]*\\]\\([^\n\\)]*\\)"        
 
 
 {-

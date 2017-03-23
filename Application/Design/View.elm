@@ -35,13 +35,13 @@ header =
 
 
 newline =
-    between (string "\n") (string "\n")
+    between (regex "\n*") (regex "\n*")
 
 
 list : Parser s Block
 list =
     BList
-        <$> newline (many <| regex "[-]{1} [^\n]*")
+        <$> newline (many <| regex "[-|+|\\d+|\\d+\\.] [^\n]*")
         <?> "list"
 
 
@@ -62,15 +62,9 @@ program : Parser s (List Block)
 program =
     manyTill expr end
 
-        
 
-view : Html Msg
-view =
-    let
-        _ =
-            Debug.log "err" "- 1\n- 2\n- 3\n\n"
-        title =
-            Debug.log "parse" <|
+
+    {-
                 parse program """
 # Header1
 ## Header2
@@ -79,11 +73,23 @@ view =
 ##### Header5
 ###### Header6
 
-- 1
-- 2
-- 3
-
+- 11111111
+  - 2222222
+  - 3333333333
++ 444444444
+  + foooooooooo
+  + barrrrrrrr
 """
+-}        
+
+        
+
+view : Html Msg
+view =
+    let
+        title =
+            Debug.log "parse" "1"
+
     in
         div []
             [ h2 [] [ text "123" ]
