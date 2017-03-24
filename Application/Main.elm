@@ -9,17 +9,59 @@ import App.Update exposing (update)
 import App.Subscriptions exposing (subscriptions)
 import App.View exposing (view)
 
-import Combine exposing (..)
-import Combine.Char exposing (..)
-import Combine.Num exposing (..)
-
+import Markdown exposing (render)
 
 main : Program Never Model Msg
 main =
     let
+        markdown = """
+# Button 按钮
+
+常用的操作按钮。
+
+## 基础用法
+
+基础的按钮用法。
+
+
+## 禁用状态
+
+按钮不可用状态。
+
+
+## 有颜色倾向
+
+不同的颜色倾向代表不同的提示
+
+
+## 图标按钮
+
+带图标的按钮可增强辨识度(有文字)或节省空间(无文字)。
+
+
+## 按钮组
+
+以按钮组的方式出现，常用于多项类似操作。
+
+
+## 加载中
+
+点击按钮后进行数据加载操作，在按钮上显示加载状态。
+
+
+## 不同尺寸
+
+Button 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。
+
+
+"""
+        md = """
+foo![alt](./images/123.jpg)**bar** [github](http://github.com) *123* `var a = 123`
+
+## header
+""" 
         _ =
-            Debug.log "TEST" <|
-                parse program "foo![alt](./images/123.jpg)bar" 
+            Debug.log "Markdown" <| (render markdown)
     in
         Navigation.program parseRoute
             { init = init
@@ -28,41 +70,6 @@ main =
             , subscriptions = subscriptions
             }
 
-
-type E
-    = EStr String
-    | EImg String String
-
-
-strong =
-    string "**" *> regex "[^\n*]*" <* string "**"
-
-em =
-    string "*" *> regex "[^\n*]*" <* string "*"
-
-link =
-    regex "\\[[^\n\\]]*\\]\\([^\n\\)]*\\)"
-
-str =
-    EStr <$> regex "[^\n\\[\\!\\*\\_\\`]*"
-
-img =
-    EImg <$> 
-        ((string "!") *> (brackets <| regex "[^\n\\]]*"))
-        <*> (parens <| regex "[^\n\\)]*")
-        <?> "img"
-
-expr =
-    lazy <|
-        \() ->
-            choice
-            [ img
-            , str
-            ]
-
-
-program =
-    manyTill expr end
 
 -- regex "!\\[[^\n\\]]*\\]\\([^\n\\)]*\\)"        
 
