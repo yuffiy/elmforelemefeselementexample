@@ -1,9 +1,9 @@
-module Markdown exposing (..)
+module Markdown exposing (render, renderToString)
 
  
 {-| Markdown parser
 
-Convert markdown to Html
+Convert markdown syntax to Html
 
 -}
 
@@ -17,24 +17,10 @@ import Html.Attributes exposing (..)
 
 type Inline
     = IText String
-    -- | IStrong Inline
-    -- | IEm Inline
     | IEmphasis String Inline
     | IImage String String
     | ILink String String
     | ICode String
-
-
--- strong : Parser s Inline      
--- strong =
---     IStrong <$> (string "**" *> expr <* string "**")
---             <?> "strong"
-
-                
--- em : Parser s Inline
--- em =
---     IEm <$> (string "*" *> expr <* string "*")
---         <?> "em"
 
 
 emphasisParsers : Parser s a -> Parser s a            
@@ -77,7 +63,8 @@ code =
     ICode <$> (between (string "`") (string "`") (regex "[^`\n]*"))
           <?> "code"
 
-expr =
+inline : Parser s Inline              
+inline =
     let
         expr_ =
             lazy <|
@@ -94,19 +81,19 @@ expr =
 
 
 type Block
-    = BInline (List Inline)
+    = BParagraphs (List Inline)
     | BHeader String (List Inline)
 
 
-inline : Parser s Block
-inline =
-    BInline <$> (many expr) <?> "inline"
+paragraphs : Parser s Block
+paragraphs =
+    BParagraphs <$> (many inline) <?> "inline"
 
 
 header : Parser s Block
 header =
     BHeader <$> ((regex "#{1,4}") <* (regex " *"))
-            <*> (many expr)
+            <*> (many inline)
             <?> "header"
 
 
@@ -117,10 +104,11 @@ block =
             lazy <|
                 \() ->
                     choice [ header
-                           , inline
+                           , paragraphs
                            ]
     in
         whitespace *> blocks <* whitespace
+
 
 
 program : Parser s (List Block)            
@@ -161,14 +149,22 @@ formatError ms stream =
             ++ String.join expectationSeparator ms
 
 
+
 parser : String -> Result String (List Block)
-parser s =
-    case parse program s of
+parser str =
+    case parse program str of
         Ok ( _, _, es ) ->
             Ok es
 
         Err ( _, stream, ms ) ->
             Err <| formatError ms stream
+
+
+
+
+renderToString: String -> String
+renderToString str =
+    ""
 
 
 
@@ -201,7 +197,7 @@ render str =
                 
         mapb block =
             case block of
-                BInline s ->
+                BParagraphs s ->
                     H.p [] <| List.map mapi s
                 BHeader n s ->
                     H.h1 [] <| List.map mapi s
