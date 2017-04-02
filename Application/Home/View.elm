@@ -16,6 +16,7 @@ import App.Model       exposing (Model)
 import App.Msg         exposing (Msg(..))
 
 import Header.View as Header
+import Component.Switch.Switch as Switch
 
 import Markdown exposing (render)
 
@@ -33,6 +34,8 @@ view m =
         , section []
             ([ banner
             ] ++ (render markdown))
+        -- , (H.map (\_ -> NoOp) (Switch.view Switch.initModel))
+        , Switch.view NoOp Switch.initModel
         , footer []
             []
         ]

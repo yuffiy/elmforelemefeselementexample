@@ -20,7 +20,7 @@
     "devDependencies": {
 	"css-loader": "^0.27.1",
 	"elm-css-webpack-loader": "^2.0.2",
-	"elm-webpack-loader": "^4.2.0",
+	"elm-webpack-loader": "^4.3.0",
 	"html-webpack-plugin": "^2.28.0",
 	"html-webpack-template": "^6.0.1",
 	"elm-webpack-html-template": "^0.0.2",

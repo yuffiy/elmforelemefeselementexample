@@ -134,7 +134,7 @@ layout m r =
         div [ class [ Style.Container ] ]
             [ (Header.view "" m)  
             , section [ class [ Style.MainContainer ]
-                      ] 
+                      ]
                   (aside_ ++ body_)
             , footer []
                 []

@@ -8,7 +8,6 @@ module App.Msg exposing (Msg(..))
 
 import Routes.App exposing (Sitemap(..))
 
-
 type Msg
     = RouteChanged Sitemap
     | RouteTo Sitemap

@@ -14,6 +14,7 @@ import Component.Typo.Stylesheets   as Typo
 import Component.Layout.Stylesheets as Layout
 import Component.Button.Stylesheets as Button
 import Component.Icon.Stylesheets   as Icon
+import Component.Switch.Stylesheets as Switch
 
 import App.Stylesheets              as App
 
@@ -29,7 +30,8 @@ fileStructure =
                          , Layout.css
                          , Icon.css
                          , Button.css
-
+                         , Switch.css
+                             
                          , App.css
                          ]
       ) ]
